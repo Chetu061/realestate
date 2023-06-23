@@ -2,48 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AdminController extends Controller
+class UserController extends Controller
 {
-    public function AdminDashboard()
+    public function index()
     {
-        return view('admin.admin_dashboard');
+        return view('welcome');
     }
-    //end method
-
-    public function AdminLogout(Request $request) //backend template logout button work
+    public function UserProfile()
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-        $notification=array(
-            'message'=>'Admin logout successfully',
-            'alert-type'=>'success'
-        );
-      
-        return redirect('admin/login')->with($notification);
-    } //end method
-    public function AdminLogin()
+        $id=Auth::user()->id;
+        $userData=User::find($id);
+        return view('frontend/dashboard/userprofile',compact('userData'));
+    }
+    public function UserProfileStore(Request $request)
     {
-
-        return view('admin.login');
-    } //end method
-    public function AdminProfile()
-    {
-
-        $id = Auth::user()->id; //login person can access
-        $profileData = User::find($id); //get data from users table from id
-        return view('admin.admin_profile_view', compact('profileData'));
-    } //end method
-
-    public function AdminProfileStore(Request $request)
-    {
+        
         $id = Auth::user()->id; //login person can access
         $data = User::find($id); //get data from users table from id
         $data->username = $request->username;
@@ -53,25 +31,40 @@ class AdminController extends Controller
         $data->address = $request->address;
         if ($request->file('photo')) {
             $file = $request->file('photo');
-            @unlink(public_path('upload/admin_images/'.$data->photo));//remove these photo[for replace photo from file explorer]
+            @unlink(public_path('upload/user_images/'.$data->photo));//remove these photo[for replace photo from file explorer]
             $filename = date('YmdHi') . $file->getClientOriginalName(); //eg 5666.p1.png image with particular id
-            $file->move(public_path('upload/admin_images'), $filename);
+            $file->move(public_path('upload/user_images'), $filename);
             $data['photo'] = $filename;
         }
         $data->save();
         $notification=array(
-            'message'=>'Admin login Updated successfully',
+            'message'=>'User login Updated successfully',
             'alert-type'=>'success'
         );
         return redirect()->back()->with($notification);
     }
-    public function AdminChangePassword()
+    public function UserLogout(Request $request) //backend template logout button work
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+        $notification=array(
+            'message'=>'User logout successfully',
+            'alert-type'=>'success'
+        );
+        return redirect('/login')->with($notification);
+        
+    } //end method
+
+    public function UserChangePassword()
     {
         $id = Auth::user()->id; //login person can access
         $profileData = User::find($id); 
-        return view('admin/admin_change_password',compact('profileData'));
+        return view('frontend.dashboard.change_password',compact('profileData'));
     }//end
-    public function AdminUpdatePassword(Request  $request)
+    public function UserPasswordUpdate(Request  $request)
     {
         //validation code
         $request->validate(
@@ -91,7 +84,7 @@ class AdminController extends Controller
             }///end math
 
             //update new password
-User::whereId(auth()->user()->id)->update(
+    User::whereId(auth()->user()->id)->update(
     ['password'=>Hash::make($request->new_password)
 ]);
     $notification=array(
@@ -101,6 +94,4 @@ User::whereId(auth()->user()->id)->update(
     return back()->with($notification);
 }
 
-       
-    
 }
