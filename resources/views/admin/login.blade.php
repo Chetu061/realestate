@@ -43,6 +43,7 @@
   <!-- End layout styles -->
 
   <link rel="shortcut icon" href="{{ asset('../../../assets/images/favicon.png') }}" />
+  
   <link rel="stylesheet" type="text/css" 
 href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css')}}" >
 </head>

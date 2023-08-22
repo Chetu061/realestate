@@ -1,10 +1,10 @@
+// for sweet alert message for js file
+
 $(function(){
     $(document).on('click','#delete',function(e){
         e.preventDefault();
         var link = $(this).attr("href");
-
-  
-                  Swal.fire({
+                Swal.fire({
                     title: 'Are you sure?',
                     text: "Delete This Data?",
                     icon: 'warning',
