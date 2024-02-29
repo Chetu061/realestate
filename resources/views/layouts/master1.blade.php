@@ -1,3 +1,4 @@
+{{-- backend dashboard Admin --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +32,12 @@
   <link rel="stylesheet" type="text/css" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css')}}" >
 {{-- datatable link --}}
 <link rel="stylesheet" href="{{asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css')}}">
+{{-- multiple selection in dropdown --}}
+<link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
+
 </head>
+
 <body>
   <div class="main-wrapper">
 
@@ -89,20 +95,20 @@
               <span class="link-title">Calendar</span>
             </a>
           </li>
-          <li class="nav-item nav-category">Components</li>
+          <li class="nav-item nav-category">User All Function</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
               <i class="link-icon" data-feather="feather"></i>
-              <span class="link-title">UI Kit</span>
+              <span class="link-title">Manage Agent </span>
               <i class="link-arrow" data-feather="chevron-down"></i>
             </a>
             <div class="collapse" id="uiComponents">
               <ul class="nav sub-menu">
                 <li class="nav-item">
-                  <a href="pages/ui-components/accordion.html" class="nav-link">Accordion</a>
+                  <a href="{{ route('all.agent') }}" class="nav-link">All Agent </a>
                 </li>
                 <li class="nav-item">
-                  <a href="pages/ui-components/alerts.html" class="nav-link">Alerts</a>
+                  <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
                 </li>
                 <li class="nav-item">
                   <a href="pages/ui-components/badges.html" class="nav-link">Badges</a>
@@ -914,5 +920,25 @@
 {{-- js file create in code folder --}}
 
 {{-- end soft alert --}}
+
+{{-- script link for multiple selection in dropdown --}}
+  <!-- Input Tags -->
+  <script src="{{ asset('backend/assets/vendors/inputmask/jquery.inputmask.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/select2/select2.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.js') }}"></script>
+
+  <script src="{{ asset('backend/assets/js/inputmask.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/select2.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/typeahead.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/tags-input.js') }}"></script>
+{{-- end input tag --}}
+
+<!-- tinymce -->
+<script src="{{ asset('backend/assets/vendors/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/tinymce.js') }}"></script>
+
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- tinymce -->
 </body>
 </html>    

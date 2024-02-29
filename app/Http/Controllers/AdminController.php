@@ -100,6 +100,80 @@ User::whereId(auth()->user()->id)->update(
     );
     return back()->with($notification);
 }
+// Agent user All method
+public function AllAgent (){
+
+    $allagent = User::where('role','agent')->get();
+    return view('backend.agentuser.all_agent',compact('allagent'));
+
+  }// End Method
+  
+  public function AddAgent(){
+
+    return view('backend.agentuser.add_agent');
+
+  }// End Method 
+
+
+  public function StoreAgent(Request $request){
+
+    User::insert([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'address' => $request->address,
+        'password' => Hash::make($request->password),
+        'role' => 'agent',
+        'status' => 'active', 
+    ]);
+
+
+       $notification = array(
+            'message' => 'Agent Created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.agent')->with($notification); 
+
+
+  }// End Method
+  public function EditAgent($id){
+    $agent=User::FindorFail($id);
+    return view('backend.agentuser.edit_agent',compact('agent'));
+  }
+  public function UpdateAgent(Request $request){
+    $pid=$request->id;
+       User::findOrFail($pid)->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'address' => $request->address,
+        ]);
+     
+     $notification=array(
+        'message'=>'Agent Updated Successfully',
+        'alert-type'=>'success'
+    );
+    return redirect()->route('all.agent')->with($notification);
+}
+  public function DeleteAgent($id){
+    User::findOrfail($id)->delete();
+    $notification=array(
+        'message'=>'Agent Deleted Successfully',
+        'alert-type'=>'success'
+    );
+    return redirect()->back()->with($notification);
+}
+public function changeStatus(Request $request){
+
+    $user = User::find($request->user_id);
+    $user->status = $request->status;
+    $user->save();
+
+    return response()->json(['success'=>'Status Change Successfully']);
+
+  }// End Method
+
 
        
     

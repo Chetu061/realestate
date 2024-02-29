@@ -1,3 +1,4 @@
+{{-- frontend dashboard user--}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
