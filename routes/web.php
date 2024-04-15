@@ -10,6 +10,8 @@ use App\Http\Controllers\backend\PropertyTypeController;
 use App\Http\Controllers\Backend\StateController;
 use App\Http\Middleware\RedirectIfAuthenticated; //when any dashboard open without logout login page not open
 use App\Http\Controllers\Agent\AgentPropertyController;
+use App\Http\Controllers\backend\BlogController;
+use App\Http\Controllers\backend\TestimonialContrller;
 use App\Http\Controllers\Frontend\CompareController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\WishlistController;
@@ -159,6 +161,36 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/delete/state/{id}', 'DeleteState')->name('delete_state');
     });
     // end state route
+    // Testimonials  All Route 
+    Route::controller(TestimonialContrller::class)->group(function () {
+
+        Route::get('/all/testimonials', 'AllTestimonials')->name('all.testimonials');
+        Route::get('/add/testimonials', 'AddTestimonials')->name('add_testimonials');
+        Route::post('/store/testimonials', 'StoreTestimonials')->name('store.testimonials');
+        Route::get('/edit/testimonials/{id}', 'EditTestimonials')->name('edit.testimonials');
+        Route::post('/update/testimonials', 'UpdateTestimonials')->name('update.testimonials');
+        Route::get('/delete/testimonials/{id}', 'DeleteTestimonials')->name('delete.testimonials');
+    });
+
+    // Blog Cateory All Route 
+    Route::controller(BlogController::class)->group(function () {
+
+        Route::get('/all/blog/category', 'AllBlogCategory')->name('all.blog.category');
+        Route::post('/store/blog/category', 'StoreBlogCategory')->name('store.blog.category');
+        Route::get('/blog/category/{id}', 'EditBlogCategory');
+
+        Route::post('/update/blog/category', 'UpdateBlogCategory')->name('update.blog.category');
+        Route::get('/delete/blog/{id}', 'DeleteBlogCategory')->name('delete.blog.category');
+    });
+    Route::controller(BlogController::class)->group(function () {
+
+        Route::get('/all/post', 'AllPost')->name('all.post');
+        Route::get('/add/post', 'AddPost')->name('add_post');
+        Route::post('/store/post', 'StorePost')->name('store.post');
+        Route::get('/edit/post/{id}', 'EditPost')->name('edit.post');
+        Route::post('/update/post', 'UpdatePost')->name('update.post');
+        Route::get('/delete/post/{id}', 'DeletePost')->name('delete.post');
+    });
 }); //end grup admin middleWARE
 
 
@@ -225,7 +257,8 @@ Route::get('/state/details/{id}', [IndexController::class, 'StateDetails'])->nam
 // Home Page Buy Seach Option
 Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySearch'])->name('buy.property.search');
 Route::post('/rent/property/search', [IndexController::class, 'RentPropertySeach'])->name('rent.property.search');
-
+// All Property Seach Option
+Route::post('/all/property/search', [IndexController::class, 'AllPropertySeach'])->name('all.property.search');
 
 
 // Wishlist Add Route 
@@ -242,3 +275,9 @@ Route::controller(CompareController::class)->group(function () {
     Route::get('/get-compare-property', 'GetCompareProperty');
     Route::get('/compare-remove/{id}', 'CompareRemove');
 });
+
+// Blog Details Route 
+Route::get('/blog/details/{slug}', [BlogController::class, 'BlogDetails']);
+Route::get('/blog/cat/list/{id}', [BlogController::class, 'BlogCatList']);
+Route::get('/blog', [BlogController::class, 'BlogList'])->name('blog.list');
+Route::post('/store/comment', [BlogController::class, 'StoreComment'])->name('store.comment');

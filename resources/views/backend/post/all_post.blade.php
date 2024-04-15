@@ -1,12 +1,11 @@
 @extends('layouts.master1')
 @section('content')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-
     <div class="page-content">
 
         <nav class="page-breadcrumb">
             <ol class="breadcrumb">
-                <a href="{{ url('add/state') }}" class="btn btn-inverse-info"> Add State </a>
+                <a href="{{ route('add_post') }}" class="btn btn-inverse-info"> Add Post </a>
             </ol>
         </nav>
 
@@ -14,29 +13,31 @@
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h6 class="card-title">State All </h6>
+                        <h6 class="card-title">Post All </h6>
 
                         <div class="table-responsive">
                             <table id="dataTableExample" class="table">
                                 <thead>
                                     <tr>
                                         <th>Sl </th>
-                                        <th>State Name </th>
-                                        <th>State Image </th>
+                                        <th>Post Title </th>
+                                        <th>Category</th>
+                                        <th>Post Image </th>
                                         <th>Action </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($state as $key => $item)
+                                    @foreach ($post as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->state_name }}</td>
-                                            <td><img src="{{ asset($item->state_image) }}" style="width:70px;height: 40px;">
+                                            <td>{{ $item->post_title }}</td>
+                                            <td>{{ $item->cat->category_name }}</td>
+                                            <td><img src="{{ asset($item->post_image) }}" style="width:70px;height: 40px;">
                                             </td>
                                             <td>
-                                                <a href="{{ url('edit/state', $item->id) }}"
+                                                <a href="{{ route('edit.post', $item->id) }}"
                                                     class="btn btn-inverse-warning"> Edit </a>
-                                                <a href="{{ url('delete/state', $item->id) }}"
+                                                <a href="{{ route('delete.post', $item->id) }}"
                                                     class="btn btn-inverse-danger" id="delete"> Delete </a>
                                             </td>
                                         </tr>

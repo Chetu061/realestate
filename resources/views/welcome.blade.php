@@ -358,7 +358,10 @@
     </section>
     <!-- deals-section end -->
 
-
+    @php
+        $testi = App\Models\Testimonial::latest()->get();
+        // dd($testi);
+    @endphp
     <!-- testimonial-section end -->
     <section class="testimonial-section bg-color-1 centred">
         <div class="pattern-layer"
@@ -369,54 +372,23 @@
                 <h2>What They Say About Us</h2>
             </div>
             <div class="single-item-carousel owl-carousel owl-theme owl-dots-none nav-style-one">
-                <div class="testimonial-block-one">
-                    <div class="inner-box">
-                        <figure class="thumb-box"><img
-                                src="{{ asset('frontend/assets/images/resource/testimonial-1.jpg') }}" alt="">
-                        </figure>
-                        <div class="text">
-                            <p>Our goal each day is to ensure that our residents’ needs are not only met but exceeded. To
-                                make that happen we are committed to provid ing an environment in which residents can enjoy.
-                            </p>
-                        </div>
-                        <div class="author-info">
-                            <h4>Rebeka Dawson</h4>
-                            <span class="designation">Instructor</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-block-one">
-                    <div class="inner-box">
-                        <figure class="thumb-box"><img
-                                src="{{ asset('frontend/assets/images/resource/testimonial-2.jpg') }}" alt="">
-                        </figure>
-                        <div class="text">
-                            <p>Our goal each day is to ensure that our residents’ needs are not only met but exceeded. To
-                                make that happen we are committed to provid ing an environment in which residents can enjoy.
-                            </p>
-                        </div>
-                        <div class="author-info">
-                            <h4>Marc Kenneth</h4>
-                            <span class="designation">Founder CEO</span>
+                @foreach ($testi as $item)
+                    <div class="testimonial-block-one">
+                        <div class="inner-box">
+                            <figure class="thumb-box"><img style="width:100px; height:100px"
+                                    src="{{ asset($item->image) }}" alt="">
+                            </figure>
+                            <div class="text">
+                                <p>{{ $item->message }}
+                                </p>
+                            </div>
+                            <div class="author-info">
+                                <h4>{{ $item->name }}</h4>
+                                <span class="designation">{{ $item->position }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="testimonial-block-one">
-                    <div class="inner-box">
-                        <figure class="thumb-box"><img
-                                src="{{ asset('frontend/assets/images/resource/testimonial-1.jpg') }}" alt="">
-                        </figure>
-                        <div class="text">
-                            <p>Our goal each day is to ensure that our residents’ needs are not only met but exceeded. To
-                                make that happen we are committed to provid ing an environment in which residents can enjoy.
-                            </p>
-                        </div>
-                        <div class="author-info">
-                            <h4>Owen Lester</h4>
-                            <span class="designation">Manager</span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -628,6 +600,9 @@
     </section>
     <!-- cta-section end -->
 
+    @php
+        $blog = App\Models\BlogPost::latest()->limit(3)->get();
+    @endphp
 
     <!-- news-section -->
     <section class="news-section sec-pad">
@@ -639,98 +614,42 @@
                     magna aliqua enim.</p>
             </div>
             <div class="row clearfix">
-                <div class="col-lg-4 col-md-6 col-sm-12 news-block">
-                    <div class="news-block-one wow fadeInUp animated" data-wow-delay="00ms" data-wow-duration="1500ms">
-                        <div class="inner-box">
-                            <div class="image-box">
-                                <figure class="image"><a href="blog-details.html"><img
-                                            src="{{ asset('frontend/assets/images/news/news-1.jpg') }}"
-                                            alt=""></a></figure>
-                                <span class="category">Featured</span>
-                            </div>
-                            <div class="lower-content">
-                                <h4><a href="blog-details.html">Including Animation In Your Design System</a></h4>
-                                <ul class="post-info clearfix">
-                                    <li class="author-box">
-                                        <figure class="author-thumb"><img
-                                                src="{{ asset('frontend/assets/images/news/author-1.jpg') }}"
-                                                alt=""></figure>
-                                        <h5><a href="blog-details.html">Eva Green</a></h5>
-                                    </li>
-                                    <li>April 10, 2020</li>
-                                </ul>
-                                <div class="text">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing sed.</p>
+                @foreach ($blog as $item)
+                    <div class="col-lg-4 col-md-6 col-sm-12 news-block">
+                        <div class="news-block-one wow fadeInUp animated" data-wow-delay="00ms"
+                            data-wow-duration="1500ms">
+                            <div class="inner-box">
+                                <div class="image-box">
+                                    <figure class="image"><a href="{{ url('blog/details/' . $item->post_slug) }}"><img
+                                                src="{{ asset($item->post_image) }}" alt=""></a></figure>
+                                    <span class="category">New</span>
                                 </div>
-                                <div class="btn-box">
-                                    <a href="blog-details.html" class="theme-btn btn-two">See Details</a>
+                                <div class="lower-content">
+                                    <h4><a href="{{ url('blog/details/' . $item->post_slug) }}">{{ $item->post_title }}</a>
+                                    </h4>
+                                    <ul class="post-info clearfix">
+                                        <li class="author-box">
+                                            <figure class="author-thumb"><img
+                                                    src="{{ !empty($item->user->photo) ? url('upload/admin_images/' . $item->user->photo) : url('upload/no_image.jpg') }}"
+                                                    alt=""></figure>
+                                            <h5><a href=" ">{{ $item['user']['name'] }}</a></h5>
+                                        </li>
+                                        <li>{{ $item->created_at->format('M d Y') }}</li>
+                                    </ul>
+                                    <div class="text">
+                                        <p> {{ $item->short_descp }}</p>
+                                    </div>
+                                    <div class="btn-box">
+                                        <a href="{{ url('blog/details/' . $item->post_slug) }}"
+                                            class="theme-btn btn-two">See Details</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
 
-                <div class="col-lg-4 col-md-6 col-sm-12 news-block">
-                    <div class="news-block-one wow fadeInUp animated" data-wow-delay="600ms" data-wow-duration="1500ms">
-                        <div class="inner-box">
-                            <div class="image-box">
-                                <figure class="image"><a href="blog-details.html"><img
-                                            src="{{ asset('frontend/assets/images/news/news-3.jpg') }}"
-                                            alt=""></a></figure>
-                                <span class="category">Featured</span>
-                            </div>
-                            <div class="lower-content">
-                                <h4><a href="blog-details.html">How New Font Technologies Will Improve The Web</a></h4>
-                                <ul class="post-info clearfix">
-                                    <li class="author-box">
-                                        <figure class="author-thumb"><img
-                                                src="{{ asset('frontend/assets/images/news/author-3.jpg') }}"
-                                                alt=""></figure>
-                                        <h5><a href="blog-details.html">Simon Baker</a></h5>
-                                    </li>
-                                    <li>April 28, 2020</li>
-                                </ul>
-                                <div class="text">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing sed.</p>
-                                </div>
-                                <div class="btn-box">
-                                    <a href="blog-details.html" class="theme-btn btn-two">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-md-6 col-sm-12 news-block">
-                    <div class="news-block-one wow fadeInUp animated" data-wow-delay="600ms" data-wow-duration="1500ms">
-                        <div class="inner-box">
-                            <div class="image-box">
-                                <figure class="image"><a href="blog-details.html"><img
-                                            src="{{ asset('frontend/assets/images/news/news-3.jpg') }}"
-                                            alt=""></a></figure>
-                                <span class="category">Featured</span>
-                            </div>
-                            <div class="lower-content">
-                                <h4><a href="blog-details.html">Taking The Pattern Library To The Next Level</a></h4>
-                                <ul class="post-info clearfix">
-                                    <li class="author-box">
-                                        <figure class="author-thumb"><img
-                                                src="{{ asset('frontend/assets/images/news/author-3.jpg') }}"
-                                                alt=""></figure>
-                                        <h5><a href="blog-details.html">Simon Baker</a></h5>
-                                    </li>
-                                    <li>April 28, 2020</li>
-                                </ul>
-                                <div class="text">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing sed.</p>
-                                </div>
-                                <div class="btn-box">
-                                    <a href="blog-details.html" class="theme-btn btn-two">See Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
