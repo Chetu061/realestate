@@ -9,6 +9,7 @@ use App\Models\MultiImage;
 use App\Models\Property;
 use App\Models\PropertyMessage;
 use App\Models\ProperyType;
+use App\Models\Schedule;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -207,5 +208,39 @@ class IndexController extends Controller
             ->get();
         // dd($property);
         return view('frontend.property.property_search', compact('property'));
+    }
+    public function StoreSchedule(Request $request)
+    {
+        // dd($request);
+        $property_id = $request->property_id;
+        $agent_id = $request->agent_id;
+        if (Auth::check()) {
+            Schedule::insert([
+
+                'user_id' => Auth::user()->id,
+                'property_id' => $property_id,
+                'agent_id' => $agent_id,
+                'tour_date' => $request->tour_date,
+                'tour_time' => $request->tour_time,
+                'message' => $request->message,
+                'created_at' => Carbon::now(),
+
+            ]);
+
+            $notification = array(
+                'message' => 'Schedule Created Successfully',
+                'alert-type' => 'success'
+            );
+
+            return redirect()->back()->with($notification);
+        } else {
+
+            $notification = array(
+                'message' => 'Plz Login Your Account First',
+                'alert-type' => 'error'
+            );
+
+            return redirect()->back()->with($notification);
+        }
     }
 }

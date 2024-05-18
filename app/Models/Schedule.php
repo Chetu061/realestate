@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Schedule extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -15,8 +15,8 @@ class Comment extends Model
     }
 
 
-    public function post()
+    public function property()
     {
-        return $this->belongsTo(BlogPost::class, 'post_id', 'id');
+        return $this->belongsTo(Property::class, 'property_id', 'id');
     }
 }
