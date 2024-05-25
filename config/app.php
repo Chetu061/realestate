@@ -159,7 +159,10 @@ return [
         /*
          * Package Service Providers...
          */
-        Intervention\Image\ImageServiceProvider::class,//for image resize
+        Intervention\Image\ImageServiceProvider::class, //for image resize
+        Spatie\Permission\PermissionServiceProvider::class, //for role and permission
+        Maatwebsite\Excel\ExcelServiceProvider::class, //for import and export
+
         /*
          * Application Service Providers...
          */
@@ -183,7 +186,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'Image' => Intervention\Image\Facades\Image::class,//for image resize
+        'Image' => Intervention\Image\Facades\Image::class, //for image resize
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class, //use import and export
+
     ])->toArray(),
 
 ];

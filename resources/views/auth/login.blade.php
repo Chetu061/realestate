@@ -1,7 +1,9 @@
 @extends('layouts.master2')
 @section('content')
 
+@section('title')
 User Login | Easy RealEstate  
+@endsection
 
 
 

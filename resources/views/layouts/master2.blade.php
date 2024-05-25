@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-    <title>Easy - RealState </title>
+    <title>@yield('title')</title>
 
     <!-- Fav Icon -->
     <link rel="icon" href="{{ asset('frontend/assets/images/favicon.ico') }}" type="image/x-icon">
@@ -90,7 +90,13 @@
         <!-- switcher menu -->
 
         <!-- end switcher menu -->
+        @php
+            $setting = App\Models\SiteSetting::find(1);
+            $blog = App\Models\BlogPost::latest()->limit(2)->get();
 
+            // @dd($sdata);
+
+        @endphp
 
         <!-- main header -->
         <header class="main-header">
@@ -99,16 +105,18 @@
                 <div class="top-inner clearfix">
                     <div class="left-column pull-left">
                         <ul class="info clearfix">
-                            <li><i class="far fa-map-marker-alt"></i>Discover St, New York, NY 10012, USA</li>
+                            <li><i class="far fa-map-marker-alt"></i>{{ $setting->company_address }}</li>
                             <li><i class="far fa-clock"></i>Mon - Sat 9.00 - 18.00</li>
-                            <li><i class="far fa-phone"></i><a href="tel:2512353256">+251-235-3256</a></li>
+                            <li><i class="far fa-phone"></i><a href="tel:2512353256">{{ $setting->support_phone }}</a>
+
+                            </li>
                         </ul>
                     </div>
                     <div class="right-column pull-right">
                         <ul class="social-links clearfix">
-                            <li><a href="index.html"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="index.html"><i class="fab fa-twitter"></i></a></li>
-                            <li><a href="index.html"><i class="fab fa-pinterest-p"></i></a></li>
+                            <li><a href="{{ $setting->facebook }}"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="{{ $setting->twitter }}"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="{{ $setting->pinterest }}"><i class="fab fa-pinterest-p"></i></a></li>
                             <li><a href="index.html"><i class="fab fa-google-plus-g"></i></a></li>
                             <li><a href="index.html"><i class="fab fa-vimeo-v"></i></a></li>
                         </ul>
@@ -138,8 +146,8 @@
                     <div class="main-box">
                         <div class="logo-box">
                             <figure class="logo"><a href="{{ url('/') }}"><img
-                                        src="{{ asset('frontend/assets/images/logo.png') }}" alt=""></a>
-                            </figure>
+                                        src="{{ asset($setting->logo) }}" alt=""></a></figure>
+
                         </div>
                         <div class="menu-area clearfix">
                             <!--Mobile Navigation Toggler-->
@@ -197,9 +205,8 @@
                 <div class="outer-box">
                     <div class="main-box">
                         <div class="logo-box">
-                            <figure class="logo"><a href="index.html"><img
-                                        src="{{ asset('frontend/assets/images/logo.png') }}" alt=""></a>
-                            </figure>
+                            <figure class="logo"><a href="{{ url('/') }}"><img
+                                        src="{{ asset($setting->logo) }}" alt=""></a></figure>
                         </div>
                         <div class="menu-area clearfix">
                             <nav class="main-menu clearfix">
@@ -237,9 +244,9 @@
                 </div>
                 <div class="social-links">
                     <ul class="clearfix">
-                        <li><a href="index.html"><span class="fab fa-twitter"></span></a></li>
-                        <li><a href="index.html"><span class="fab fa-facebook-square"></span></a></li>
-                        <li><a href="index.html"><span class="fab fa-pinterest-p"></span></a></li>
+                        <li><a href="{{ $setting->twitter }}"><span class="fab fa-twitter"></span></a></li>
+                        <li><a href="{{ $setting->facebook }}"><span class="fab fa-facebook-square"></span></a></li>
+                        <li><a href="{{ $setting->pinterest }}}}"><span class="fab fa-pinterest-p"></span></a></li>
                         <li><a href="index.html"><span class="fab fa-instagram"></span></a></li>
                         <li><a href="index.html"><span class="fab fa-youtube"></span></a></li>
                     </ul>
@@ -287,20 +294,19 @@
                                     <h3>Top News</h3>
                                 </div>
                                 <div class="post-inner">
-                                    <div class="post">
-                                        <figure class="post-thumb"><a href="blog-details.html"><img
-                                                    src="{{ asset('frontend/assets/images/resource/footer-post-1.jpg') }}"
-                                                    alt=""></a></figure>
-                                        <h5><a href="blog-details.html">The Added Value Social Worker</a></h5>
-                                        <p>Mar 25, 2020</p>
-                                    </div>
-                                    <div class="post">
-                                        <figure class="post-thumb"><a href="blog-details.html"><img
-                                                    src="{{ asset('frontend/assets/images/resource/footer-post-2.jpg') }}"
-                                                    alt=""></a></figure>
-                                        <h5><a href="blog-details.html">Ways to Increase Trust</a></h5>
-                                        <p>Mar 24, 2020</p>
-                                    </div>
+                                    @foreach ($blog as $item)
+                                        <div class="post">
+                                            <figure class="post-thumb"><a
+                                                    href="{{ url('blog/details/' . $item->post_slug) }}"><img
+                                                        src="{{ asset($item->post_image) }}" alt=""></a>
+                                            </figure>
+                                            <h5><a
+                                                    href="{{ url('blog/details/' . $item->post_slug) }}">{{ $item->post_title }}</a>
+                                            </h5>
+                                            <p>{{ $item->created_at->format('M d Y') }}</p>
+                                        </div>
+                                    @endforeach
+
                                 </div>
                             </div>
                         </div>
@@ -311,12 +317,11 @@
                                 </div>
                                 <div class="widget-content">
                                     <ul class="info-list clearfix">
-                                        <li><i class="fas fa-map-marker-alt"></i>Flat 20, Reynolds Neck, North
-                                            Helenaville, FV77 8WS</li>
-                                        <li><i class="fas fa-microphone"></i><a href="tel:23055873407">+2(305)
-                                                587-3407</a></li>
+                                        <li><i class="fas fa-map-marker-alt"></i>{{ $setting->company_address }}</li>
+                                        <li><i class="fas fa-microphone"></i><a
+                                                href="tel:23055873407">+{{ $setting->support_phone }}</a></li>
                                         <li><i class="fas fa-envelope"></i><a
-                                                href="mailto:info@example.com">info@example.com</a></li>
+                                                href="mailto:info@example.com">{{ $setting->email }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -331,7 +336,7 @@
                                     src="{{ asset('frontend/assets/images/footer-logo.png') }}" alt=""></a>
                         </figure>
                         <div class="copyright pull-left">
-                            <p><a href="index.html">Realshed</a> &copy; 2021 All Right Reserved</p>
+                            <p><a href="index.html"></a>{{ $setting->copyright }} </p>
                         </div>
                         <ul class="footer-nav pull-right clearfix">
                             <li><a href="index.html">Terms of Service</a></li>
@@ -603,3 +608,4 @@
 </body><!-- End of .page_wrapper -->
 
 </html>
+

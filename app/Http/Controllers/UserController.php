@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\ProperyType;
+use App\Models\Schedule;
 
 class UserController extends Controller
 {
@@ -98,4 +99,13 @@ class UserController extends Controller
         );
         return back()->with($notification);
     }
+    public function UserScheduleRequest()
+    {
+
+        $id = Auth::user()->id;
+        $userData = User::find($id);
+
+        $srequest = Schedule::where('user_id', $id)->get();
+        return view('frontend.message.schedule_request', compact('userData', 'srequest'));
+    } // End Method 
 }
